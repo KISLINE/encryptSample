@@ -25,6 +25,8 @@ public class encryptSample {
 			LOGGER.info("Plain Text : " + inputValue);
 			LOGGER.info("SHA256 : " + getSHA256(inputValue));
 			LOGGER.info("SHA256(URLEncoded) : " + URLEncoder.encode(getSHA256(inputValue), "UTF-8").toString());
+			LOGGER.info("MD5 : " + getMD5(inputValue));
+			LOGGER.info("MD5(URLEncoded) : " + URLEncoder.encode(getMD5(inputValue), "UTF-8").toString());
 		} catch (Exception e) {
 			LOGGER.error("main", e);
 		}
@@ -39,11 +41,29 @@ public class encryptSample {
 		}
 	}
 
+	public static String getMD5(String s) throws IOException {
+		try {
+			return getMD5String(s);
+		} catch (Exception e) {
+			LOGGER.error("getMD5", e);
+			throw new IOException(e.toString());
+		}
+	}
+
 	private static String getCryptoSHA256String(String inputValue) throws NoSuchAlgorithmException, IOException {
 		if (inputValue == null) {
 			return getCryptoSHA256String("default");
 		}
 		byte[] ret = digest("SHA-256", inputValue.getBytes());
+
+		return encode(ret);
+	}
+
+	private static String getMD5String(String inputValue) throws NoSuchAlgorithmException, IOException {
+		if (inputValue == null) {
+			return getMD5String("default");
+		}
+		byte[] ret = digest("MD5", inputValue.getBytes());
 
 		return encode(ret);
 	}
